@@ -23,6 +23,7 @@ const getInfo = async () => {
       end_time: i + 1 >= chaps.length ? length : chaps[i + 1].start_time
     };
   });
+  if(!fs.existsSync(`${__dirname}/videos/`)){fs.mkdirSync(`${__dirname}/videos/`)}
   const outputParentDir = `${__dirname}/videos/${ans.videoDetails.videoId}/`;
   if(!fs.existsSync(outputParentDir)) {fs.mkdirSync(outputParentDir);}
   downloadVideo(
