@@ -3,9 +3,10 @@ const ytdl = require("ytdl-core");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 const archiver = require("archiver");
+const downloadVideo = require('./utils/videoDownloader')
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-var url = "https://www.youtube.com/watch?v=ZwPLhyUgm-g";
+var url = "https://www.youtube.com/watch?v=qwfE7fSVaZM";
 
 const getInfo = async () => {
   var ans = await ytdl.getInfo(url);
@@ -24,12 +25,12 @@ const getInfo = async () => {
     };
   });
   const outputParentDir = `${__dirname}/videos/${ans.videoDetails.videoId}/`;
-  if(!fs.existsSync(outputParentDir)) {fs.mkdirSync(outputParentDir);}
+  // if(!fs.existsSync(outputParentDir)) {fs.mkdirSync(outputParentDir);}
   downloadVideo(
-    `${outputParentDir}${ans.videoDetails.videoId}.mp4`,
+    outputParentDir,
     url,
+    ans.videoDetails.videoId,
     chaps,
-    ans.videoDetails.videoId
   );
 };
 
@@ -47,13 +48,7 @@ function fmtMSS(e) {
   return h + ":" + m + ":" + s;
 }
 
-const downloadVideo = async (fileName, url, chaps, id) => {
-  await ytdl(url)
-    .pipe(fs.createWriteStream(fileName))
-    .on("finish", () => {
-      splice(fileName, chaps, id);
-    });
-};
+
 
 const splice = async (fileName, chaps, id) => {
   if (chaps.length <= 0) return;
