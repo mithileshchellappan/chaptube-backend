@@ -1,4 +1,5 @@
 const allChapDownloader = require("../services/allChapDownloader");
+const videoDownloaderService = require("../services/videoDownloaderService");
 const getChapters = require("../utils/getChapters");
 
 const downloadAllChaps = async (req, res) => {
@@ -31,4 +32,26 @@ const downloadAllChaps = async (req, res) => {
   return res.status(200).send({url:`${req.hostname}${dynamicPath}`});
 };
 
-module.exports = { downloadAllChaps };
+const downloadVideo = async (req, res) => {
+  console.log('inside download video controller')
+  const {
+    body: {  url }
+  } = req;
+  if (!url) {
+    return res.status(400).send("VideoId or URL not found");
+  }
+
+  var result  = await videoDownloaderService(url).catch(e=>{
+    console.log(e)
+    return e
+  })
+  if(result.message==='error'){
+    res.status(500).send('something went wrong try again')
+  }
+  var {relativePath} = result
+  res.status(200).send({url:`${req.hostname}/${relativePath.replace(`\\`,`/`)}`})
+
+
+}
+
+module.exports = { downloadAllChaps,downloadVideo };

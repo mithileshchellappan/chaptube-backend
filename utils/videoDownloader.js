@@ -3,6 +3,7 @@ const fs = require("fs");
 const videoDownloader = async (destinationFolder,videoFile, url, id) => {
   return new Promise((resolve,reject)=>{
     // console.log(destinationFolder,url,id)
+    console.log('inside videoDownloader')
     try{
 
   if (!fs.existsSync(destinationFolder)) {
