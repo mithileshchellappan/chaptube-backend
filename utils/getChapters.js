@@ -1,7 +1,9 @@
 const ytdl = require('ytdl-core')
 
 const getChapters =async (url) => {
-    var ans = await ytdl.getInfo(url);
+    return new Promise(async (resolve, reject) => {
+      try {
+        var ans = await ytdl.getInfo(url);
     var id = ans.videoDetails.videoId
   var length = ans.videoDetails.lengthSeconds;
   var chaps = ans.videoDetails?.chapters;
@@ -19,7 +21,11 @@ const getChapters =async (url) => {
     };
   });
   
-  return {status:"success",message:{chaps,id}}
+  resolve( {status:"success",message:{chaps,id}})
+      } catch (error) {
+        reject({status:"error",message:error})
+      }
+    })
 }
 
 function fmtMSS(e) {

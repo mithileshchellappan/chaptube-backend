@@ -1,34 +1,20 @@
 const fs = require("fs");
-const downloadVideo = require('./utils/videoDownloader')
-const getChapters = require('./utils/getChapters')
-const splice = require('./utils/splice');
-const zipper = require("./utils/zipper");
+const express = require("express");
+const bodyParser = require("body-parser");
+const v1Router = require("./v1/routes");
+const chapsRouter = require("./v1/routes/chapsRouter");
+const fileServer = require("./fileServer");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-var url = "https://www.youtube.com/watch?v=H19_JKw4QN4";
+app.use(bodyParser.json());
 
-const getInfo = async () => {
+app.use("/api/v1", v1Router);
+app.use("/api/v1/download", chapsRouter);
 
-  var res = await getChapters(url)
-  if(res.status === "error"){console.log(res.message);  return res.message}
-  var {message:{chaps,id}}=res
-  if(!fs.existsSync(`${__dirname}/videos/`)){fs.mkdirSync(`${__dirname}/videos/`)}
-  const outputParentDir = `${__dirname}/videos/${id}/`;
-  // if(!fs.existsSync(outputParentDir)) {fs.mkdirSync(outputParentDir);}
+app.listen(PORT, () => {
+  console.log(`running on port ${PORT}`);
+});
 
-  var vid = await downloadVideo(
-    outputParentDir,
-    url,
-    id,
-    chaps,
-  );
+fileServer(PORT)
 
-  if(vid.status=="error"){console.log(vid.message); return vid.message}
-
-  var {status,message} = await splice(vid.message,chaps,id)
-  if(status==="error"){console.log(message); return message}
-  var zipped = await zipper(message,id,vid.message)
-  console.log(zipped)
-
-};
-
-getInfo();

@@ -1,14 +1,31 @@
 const ytdl = require("ytdl-core");
 const fs = require("fs");
-const videoDownloader = async (destinationFolder, url, id, chaps) => {
+const videoDownloader = async (destinationFolder,videoFile, url, id) => {
   return new Promise((resolve,reject)=>{
-    try{var fileName = destinationFolder + id + ".mp4";
+    // console.log(destinationFolder,url,id)
+    try{
 
   if (!fs.existsSync(destinationFolder)) {
     fs.mkdirSync(destinationFolder);
   }
    ytdl(url)
-    // .on("response", function (res) {
+  
+    .on("finish", () => {
+      console.log(`Finished downloading ${id} video`);
+      resolve( {status:"success",message:videoFile})
+    }).on("error",(e)=>{
+      reject( {status:"error",message:e})
+    })
+    .pipe(fs.createWriteStream(videoFile));}
+    catch (e){
+      reject( {status:"error",message:e})
+    }
+  })
+    
+};
+
+module.exports = videoDownloader;
+  // .on("response", function (res) {
     //   console.log("inside response");
     //   var totalSize = res.headers["content-length"];
     //   var dataRead = 0;
@@ -19,19 +36,3 @@ const videoDownloader = async (destinationFolder, url, id, chaps) => {
     //     console.log((percent * 100).toFixed(2) + "% ");
     //   });
     // })
-    .on("finish", () => {
-      console.log(`Finished downloading ${id} video`);
-      resolve( {status:"success",message:fileName})
-      // splice(fileName, chaps, id);
-    }).on("error",(e)=>{
-      reject( {status:"error",message:e})
-    })
-    .pipe(fs.createWriteStream(fileName));}
-    catch (e){
-      reject( {status:"error",message:e})
-    }
-  })
-    
-};
-
-module.exports = videoDownloader;

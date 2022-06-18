@@ -4,18 +4,18 @@ const path = require("path");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-const splice = async (fileName, chaps, id) => {
+const splice = async (chapterDir,videoFile, chaps, id) => {
   return new Promise(async(resolve,reject)=>{
     try {
         if (chaps.length <= 0) return;
-        const outputDir = path.join(__dirname, "..", "videos", id, "chapterVids");
-        if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+
+        if (!fs.existsSync(chapterDir)) fs.mkdirSync(chapterDir);
         var itemsProcessed = 0;
         await chaps.forEach( ({ title, start_time, duration, i }) => {
-           ffmpeg(fileName)
+           ffmpeg(videoFile)
             .setStartTime(start_time)
             .setDuration(duration)
-            .output(`${outputDir}/${i}_${title.replace(/[^a-zA-Z ]/g, "")}.mp4`)
+            .output(`${chapterDir}/${i}_${title.replace(/[^a-zA-Z ]/g, "")}.mp4`)
             .on("end", function (err) {
               if (!err) {
                 console.log("conversion Done " + title);
@@ -23,8 +23,7 @@ const splice = async (fileName, chaps, id) => {
             itemsProcessed++;
             
             if (itemsProcessed == chaps.length) {
-                  resolve( { status: "success", message: outputDir })
-                //  zipper(outputDir,id)
+                  resolve( { status: "success", message: chapterDir })
               }
             })
             .on("error", function (e) {
