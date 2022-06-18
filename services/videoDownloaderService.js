@@ -8,7 +8,7 @@ const videoDownloaderService = async (url) =>{
             console.log('inside service')
             var videoId = ytdl.getURLVideoID(url)
             console.log(videoId)
-            var destinationFolder = path.join(__dirname,'..','videos')
+            var destinationFolder = path.join(__dirname,'..','temp')
             var videoFile = path.join(destinationFolder,`${videoId}.mp4`)
             console.log('here')
             var result = await videoDownloader(destinationFolder,videoFile,url,videoId)

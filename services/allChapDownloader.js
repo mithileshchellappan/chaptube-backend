@@ -5,12 +5,12 @@ const fs = require("fs");
 const zipper = require("../utils/zipper");
 
 const allChapDownloader = async (url, id, chaps) => {
-    var outputParentDir = path.join(__dirname, "../videos");
+    var outputParentDir = path.join(__dirname, "../temp");
   if (!fs.existsSync(outputParentDir)) {
     fs.mkdirSync(outputParentDir);
   }
   
-  const parentDir = path.join(__dirname, "..", "videos", id);
+  const parentDir = path.join(__dirname, "..", "temp", id);
   const videoFile = path.join(parentDir,`${id}.mp4`)
   const chapterDir = path.join(parentDir, "chapterVids");
   const zipFile = path.join(parentDir, `${id}.zip`);

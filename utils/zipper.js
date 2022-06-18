@@ -23,7 +23,7 @@ var zipper = async (chapterDir,zipFile, id,vid) => {
         //   force: true
         // });
         // fs.rmSync(vid);
-        resolve({ status: "success", message: { zipFile,zipFileName:`${id}.zip`,dynamicPath:`/videos/${id}/${id}.zip`} });
+        resolve({ status: "success", message: { zipFile,zipFileName:`${id}.zip`,dynamicPath:`/temp/${id}/${id}.zip`} });
       });
       archive.finalize();
     } catch (e) {
