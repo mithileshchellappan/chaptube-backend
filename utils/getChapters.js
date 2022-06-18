@@ -6,7 +6,7 @@ const getChapters =async (url) => {
         var ans = await ytdl.getInfo(url);
     var id = ans.videoDetails.videoId
   var length = ans.videoDetails.lengthSeconds;
-  var chaps = ans.videoDetails?.chapters;
+  var chaps = ans.videoDetails.chapters;
   if(chaps.length<=0) return {status:"error",message:"no chapters in video"}
   chaps.forEach((val, i) => {
     chaps[i] = {
