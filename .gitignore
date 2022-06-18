@@ -8,7 +8,7 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 #generated files
-/videos
+/temp
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
