@@ -7,11 +7,13 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const splice = async (chapterDir,videoFile, chaps, id) => {
   return new Promise(async(resolve,reject)=>{
     try {
+      console.log('inside splice')
         if (chaps.length <= 0) return;
 
         if (!fs.existsSync(chapterDir)) fs.mkdirSync(chapterDir);
         var itemsProcessed = 0;
         await chaps.forEach( ({ title, start_time, duration, i }) => {
+          console.log('inside forEach')
            ffmpeg(videoFile)
             .setStartTime(start_time)
             .setDuration(duration)
