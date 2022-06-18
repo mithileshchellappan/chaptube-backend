@@ -16,4 +16,4 @@ app.listen(PORT, () => {
   console.log(`running on port ${PORT}`);
 });
 
-fileServer(PORT)
+fileServer(PORT+1)
