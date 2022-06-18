@@ -1,12 +1,13 @@
 const ytdl = require("ytdl-core");
 const fs = require("fs");
 const videoDownloader = async (destinationFolder, url, id, chaps) => {
-  var fileName = destinationFolder + id + ".mp4";
+  return new Promise((resolve,reject)=>{
+    try{var fileName = destinationFolder + id + ".mp4";
 
   if (!fs.existsSync(destinationFolder)) {
     fs.mkdirSync(destinationFolder);
   }
-  ytdl(url)
+   ytdl(url)
     // .on("response", function (res) {
     //   console.log("inside response");
     //   var totalSize = res.headers["content-length"];
@@ -19,10 +20,18 @@ const videoDownloader = async (destinationFolder, url, id, chaps) => {
     //   });
     // })
     .on("finish", () => {
-      console.log(`Finished downloading ${id} video, moving to splicing`);
+      console.log(`Finished downloading ${id} video`);
+      resolve( {status:"success",message:fileName})
       // splice(fileName, chaps, id);
+    }).on("error",(e)=>{
+      reject( {status:"error",message:e})
     })
-    .pipe(fs.createWriteStream(fileName));
+    .pipe(fs.createWriteStream(fileName));}
+    catch (e){
+      reject( {status:"error",message:e})
+    }
+  })
+    
 };
 
 module.exports = videoDownloader;
