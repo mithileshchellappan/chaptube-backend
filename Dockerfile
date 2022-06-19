@@ -1,30 +1,29 @@
-FROM ubuntu:18.04
+FROM node:16
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /usr/src/app
 
-RUN apt-get install node npm
+# RUN apt-get install node npm
 
 RUN npm config set package-lock false
 
 COPY package*.json ./
 
 RUN npm install
-RUN adduser --disabled-password --gecos '' docker
-RUN adduser docker sudo
 
-RUN apt-get update && \
-    apt-get install -y software-properties-common && \
-    rm -rf /var/lib/apt/lists/*
 
-RUN add-apt-repository ppa:jonathonf/ffmpeg-4
-RUN apt-get update && apt-get install -y ffmpeg
+# RUN wget https://www.ffmpeg.org/releases/ffmpeg-4.0.2.tar.gz
+# RUN tar -xzf ffmpeg-4.0.2.tar.gz; rm -r ffmpeg-4.0.2.tar.gz
+# RUN cd ./ffmpeg-4.0.2; ./configure --enable-gpl --enable-libmp3lame --enable-decoder=mjpeg,png --enable-encoder=png --enable-openssl --enable-nonfree --disable-x86asm
+
+
+# RUN cd ./ffmpeg-4.0.2; make
+# RUN  cd ./ffmpeg-4.0.2; make install
 
 # RUN apt-get install ffmpeg-4 libavcodec-extra-53
 
 COPY . .
 
 EXPOSE 3000
-USER docker
 CMD ["node","index.js"]
