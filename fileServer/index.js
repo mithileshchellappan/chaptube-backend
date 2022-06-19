@@ -27,6 +27,12 @@ module.exports = (PORT) => {
           contentType = "application/zip";
         } else if (ext === ".mp4") {
           contentType = "video/mp4";
+        }else if(ext===".js"||ext===".json"||ext===".gitignore"){
+          res.writeHead(401, {
+            "Content-Type": "text/plain"
+          });
+           res.end(`UNAUTHORIZED`)
+           return
         }
 
         res.writeHead(200, {
