@@ -15,8 +15,10 @@ app.use("/api/v1/download", chapsRouter);
 
 app.use('/files',express.static(path.join(__dirname,'temp')))
 
-app.listen(PORT, () => {
+var server = app.listen(PORT, () => {
   console.log(`running on port ${PORT}`);
 });
+
+server.setTimeout(500000)
 
 
