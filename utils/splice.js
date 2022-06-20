@@ -1,6 +1,7 @@
 const ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs");
 const path = require("path");
+const ffmpegSplice = require("./ffmpegSplicer");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 ffmpeg.setFfmpegPath(ffmpegPath);
 
@@ -9,30 +10,20 @@ const splice = async (chapterDir,videoFile, chaps, id) => {
     try {
       console.log('inside splice')
         if (chaps.length <= 0) return;
-
+        var result;
         if (!fs.existsSync(chapterDir)) fs.mkdirSync(chapterDir);
         var itemsProcessed = 0;
-        await chaps.forEach( ({ title, start_time, duration, i }) => {
+         for(var i=0;i<chaps.length;i=i+2){
           console.log('inside forEach')
-           ffmpeg(videoFile)
-            .setStartTime(start_time)
-            .setDuration(duration)
-            .output(`${chapterDir}/${i}_${title.replace(/[^a-zA-Z ]/g, "")}.mp4`)
-            .on("end", function (err) {
-              if (!err) {
-                console.log("conversion Done " + title);
-            }
-            itemsProcessed++;
-            
-            if (itemsProcessed == chaps.length) {
-                  resolve( { status: "success", message: chapterDir })
-              }
-            })
-            .on("error", function (e) {
-              console.log(title + " error: ", e);
-              reject( { status: "error", message: e })
-            })
-            .run();
+          var {title,start_time,duration} = chaps[i]
+          
+          result = await ffmpegSplice(title,start_time,duration,itemsProcessed,videoFile,chapterDir,i)
+          result.status==="error"&&reject(result)
+        }
+        resolve({status:'success',message:chapterDir})
+
+        await chaps.forEach( ({ title, start_time, duration, i }) => {
+          
         });
       } catch (e) {
           reject({status:"error",message:e})
