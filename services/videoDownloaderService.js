@@ -12,7 +12,7 @@ const videoDownloaderService = async (url) =>{
             var videoFile = path.join(destinationFolder,`${videoId}.mp4`)
             console.log('here')
             var result = await videoDownloader(destinationFolder,videoFile,url,videoId)
-           resolve({...result,relativePath:path.relative(process.cwd(),result.message)})
+           resolve({...result,relativePath:`${videoId}.mp4`})
            }catch (e){
                reject( {status:"error",message:e})
            }

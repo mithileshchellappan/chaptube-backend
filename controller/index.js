@@ -29,7 +29,7 @@ const downloadAllChaps = async (req, res) => {
 
   var { filePath, fileName,dynamicPath } = result.message;
 
-  return res.status(200).send({url:`${req.hostname}${dynamicPath}`});
+  return res.status(200).send({url:`${process.env.HOSTNAME}/files/${id}/${id}.zip`});
 };
 
 const downloadVideo = async (req, res) => {
@@ -49,7 +49,7 @@ const downloadVideo = async (req, res) => {
     res.status(500).send('something went wrong try again')
   }
   var {relativePath} = result
-  res.status(200).send({url:`${req.hostname}/${relativePath.replace(`\\`,`/`)}`})
+  res.status(200).send({url:`${process.env.HOSTNAME}/files/${relativePath}`})
 
 
 }
