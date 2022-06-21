@@ -13,7 +13,7 @@ const splice = async (chapterDir,videoFile, chaps, id) => {
         var result;
         if (!fs.existsSync(chapterDir)) fs.mkdirSync(chapterDir);
         var itemsProcessed = 0;
-         for(var i=0;i<chaps.length;i=i+2){
+         for(var i=0;i<chaps.length;i=i++){
           console.log('inside forEach')
           var {title,start_time,duration} = chaps[i]
           
