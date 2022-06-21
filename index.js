@@ -19,6 +19,6 @@ var server = app.listen(PORT, () => {
   console.log(`running on port ${PORT}`);
 });
 
-server.setTimeout(500000)
+server.setTimeout(5000000)
 
 
